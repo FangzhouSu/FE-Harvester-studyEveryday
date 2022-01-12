@@ -1,4 +1,6 @@
-# 校招大厂指南
+# 校招大厂指南 22/1/12
+
+> 感谢 [金轮弟弟](https://github.com/Eurekaxxh) & [我自己](https://github.com/FangzhouSu)（🐶） 对[`BigSharkLx`](https://github.com/BigSharkLx) 校招经验分享的总结~
 
 ![image-20220112211633382](https://gitee.com/su-fangzhou/blog-image/raw/master/202201122116683.png)
 
