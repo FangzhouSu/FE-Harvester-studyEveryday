@@ -1,0 +1,31 @@
+字节跳动国际化社区二面（45min)
+1. DNS解析
+  1. 计算机网络 
+2. RIP 协议 路由寻址协议
+3. Cdn
+  1. cdn根据什么就近访问呢
+    1. 计网复习笔记
+4. Content-type
+  1. 常见的的Content-type
+    1. application/x-www-form-urlencoded  浏览器原生form表单，表单属性如果不设置enctype ， 默认以 application/form的格式进行发送 放到body中并进行例转码
+    2. Multipart-formdata  上传文件
+    3. application/json json字符串
+    4. text/xml 提交xml格式的数据
+  2. 音频
+5. 强缓存 协商缓存
+6. 项目方面
+  1. 性能问题
+  2. 懒加载的问题
+    1. 点了很多之后还会慢
+  3. 多个音频如何操作呢
+  4. Modal 下拉框的实现原理  实现一个弹窗组件的难点
+    1. Html片段
+    2. 实现弹窗组件 主要核心是 z-index 和 v-if 还有vue的插槽实现的论如何用Vue实现一个弹窗-一个简单的组件实现 - 掘金 (juejin.cn)
+  5. Mobox vuex 有什么区别吗 状态管理器为什么有这么多不同的呢
+  6. vue数据传递和事件触发
+  7. 跨域问题多少种解法
+  8. CORS
+  9. 登陆状态  使用gmail可以切账号 多用户登录 如何实现？
+    1. Cookie
+7. 功能编码题 实现一个输入框
+8. 输入框实现防抖有什么思路？
