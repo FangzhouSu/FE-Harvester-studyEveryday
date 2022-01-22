@@ -1241,7 +1241,7 @@ let difference = new Set([...a].filter(x => !b.has(x))) //  {1}
 
 - 原型式继承
 
-    - ```
+    - ```js
         // 原型式继承
         // Object()可以理解为对传入的对象进行一个浅复制
         let person = {
@@ -1261,7 +1261,7 @@ let difference = new Set([...a].filter(x => !b.has(x))) //  {1}
 
 - 寄生式继承
 
-    - ```
+    - ```js
         // 寄生继承
         // 像是对原型继承的另一种升级 , 采用了工厂模式的方法 增加了对象的方法
         let jisheng = {
@@ -1284,7 +1284,7 @@ let difference = new Set([...a].filter(x => !b.has(x))) //  {1}
 
 - 组合继承
 
-    - ```
+    - ```js
         // 组合继承
         // 原型链 ＋ 盗用构造函数
         function Super(name){
@@ -1311,7 +1311,7 @@ let difference = new Set([...a].filter(x => !b.has(x))) //  {1}
 
 - 寄生式组合继承
 
-    - ```
+    - ```js
         // 寄生式组合继承
         // 最佳实践!! 相比于组合继承 减少了构造函数调用的次数
         function Superr (name){
@@ -1341,21 +1341,21 @@ let difference = new Set([...a].filter(x => !b.has(x))) //  {1}
             // [ 'szj', 'zy' ]
         ```
 
-    ## 2. 实现异步加载方法的关键字有哪些？
+## 2. 实现异步加载方法的关键字有哪些？
 
-    ![image.png](https://cdn.nlark.com/yuque/0/2020/png/1500604/1603547262709-5029c4e4-42f5-4fd4-bcbb-c0e0e3a40f5a.png)
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1500604/1603547262709-5029c4e4-42f5-4fd4-bcbb-c0e0e3a40f5a.png)
 
-    - defer 
-    - async
-    - 总结：
-        - 两者都是用来异步加载外部脚本的关键字
-        - defer 加载完成后 页面渲染后执行
-        - async 加载完成后 立即执行
-        - 多个 defer 按顺序依次执行  ， 多个async执行顺序不定
+- defer 
+- async
+- 总结：
+    - 两者都是用来异步加载外部脚本的关键字
+    - defer 加载完成后 页面渲染后执行
+    - async 加载完成后 立即执行
+    - **多个 defer 按顺序依次执行**  ， 多个async执行顺序不定
 
-    ## 3. 什么是JS的事件循环 ， 事件循环机制是什么？
+## 3. 什么是JS的事件循环 ， 事件循环机制是什么？
 
-    ![image](https://cdn.nlark.com/yuque/0/2021/png/1500604/1615476500217-472563e1-de67-403f-baa7-0fd574d0e618.png?x-oss-process=image%2Fresize%2Cw_1500)
+![image](https://cdn.nlark.com/yuque/0/2021/png/1500604/1615476500217-472563e1-de67-403f-baa7-0fd574d0e618.png?x-oss-process=image%2Fresize%2Cw_1500)
 
 如图： JS是单线程的 ， 在代码执行时，会将代码压入执行栈中保证函数的有序执行 ， 遇到异步任务会将 任务抛给webapi进行处理 ， 处理之后将回调函数推到任务队列（宏任务队列 ， 微任务队列） ， 当执行栈为空时 ， 先执行微任务队列中的函数 ， 如果需要渲染页面 ， 则会渲染页面 ， 最后执行宏任务队列中的函数。
 
@@ -1364,7 +1364,7 @@ Event Loop 执行顺序如下所示：
 - 首先执行同步代码，这属于宏任务
 - 当执行完所有同步代码后，执行栈为空，查询是否有异步代码需要执行
 - 执行所有微任务
-- 当执行完所有微任务后，如有必要会渲染页面
+- 当执行完所有微任务后，**如有必要会渲染页面**
 - 然后开始下一轮 Event Loop，执行宏任务中的异步代码
 
 宏任务
@@ -1373,7 +1373,7 @@ Event Loop 执行顺序如下所示：
 - 宏任务包括： script 脚本的执行、setTimeout ，setInterval ，setImmediate 一类的定时事件，还有如 I/O 操作、UI 渲染等。
 
 ## 4 [leetcode 20 有效的括号 ](https://leetcode-cn.com/problems/valid-parentheses/)
-```
+```js
 /**
  * @param {string} s
  * @return {boolean}
@@ -1394,6 +1394,32 @@ var isValid = function(s) {
         }
     }
     return stack.length === 0 ? true : false
+};
+```
+
+> @[敲代码的小提琴手](https://leetcode-cn.com/u/billsu/)
+
+```js
+var isValid = function(s) {
+  let map = new Map([
+    ['(', ')'],
+    ['{', '}'],
+    ['[', ']'],
+  ]);
+  const stack = [];
+  for (let i = 0; i < s.length; i++) {
+    if (map.has(s[i])) {
+      // 找到左括号 入栈
+      stack.push(s[i]); 
+    } else if (map.get(stack[stack.length - 1]) !== s[i]) {
+      // 左右括号不匹配 字符串无效
+      return false; 
+    } else {
+      // 找到匹配得右括号 弹栈
+      stack.pop(); 
+    }
+  }
+  return !stack.length;
 };
 ```
 
