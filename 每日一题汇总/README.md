@@ -1624,8 +1624,6 @@ var isValid = function(s) {
 	```
 	动态规划的转移方程为：dp[i] = dp[i - 1] + dp[i - 2];
 	```
-	
-	递归地解决问题——
 
 ```js
 var climbStairs = function(n) {
