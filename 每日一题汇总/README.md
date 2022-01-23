@@ -1423,3 +1423,206 @@ var isValid = function(s) {
 };
 ```
 
+# 1/23 每日一题
+
+> 1. let、const、var区别
+> 2. 数组去重的方法有哪些？
+> 3. vue双向绑定的原理
+> 4. 力扣第70题 爬楼梯
+
+## 1. let、const、var区别
+
+- 作用域
+    - let 、 const 为块级作用域 
+    - var为函数作用域
+- 是否可以重复声明
+    - let var 可以重复声明
+    - const 不可以重复声明
+- 变量提升
+    - var 具有变量提升
+- 暂时性死区
+    - let 、const 具有暂时性死区 ， 未声明之后不能使用
+- 给全局添加属性
+    - var 可以给全局添加属性 let const 不会
+- 初始值设置
+    - var let 声明时可以不设置初始值
+    - const 必须设置初始值
+- 指针的指向
+    - let 可以修改指针的指向（重新赋值） ， const 不能够修改指针的指向不可以重新赋值，但是引用数据类型的属性可以改变
+
+| **区别**           | **var** | **let** | **const** |
+| ------------------ | ------- | ------- | --------- |
+| 是否有块级作用域   | ×       | ✔️       | ✔️         |
+| 是否存在变量提升   | ✔️       | ×       | ×         |
+| 是否添加全局属性   | ✔️       | ×       | ×         |
+| 能否重复声明变量   | ✔️       | ×       | ×         |
+| 是否存在暂时性死区 | ×       | ✔️       | ✔️         |
+| 是否必须设置初始值 | ×       | ×       | ✔️         |
+| 能否改变指针指向   | ✔️       | ✔️       | ×         |
+
+## 2. 数组去重的方法有哪些？
+
+##### 1. 数组元素比较型
+
+- 双层`for`循环
+
+    - ```
+        // 双层for循环
+        // 前一个跟之后所有进行比较 ， 重复了删除掉
+        function uniq(arr){
+        	for(let i = 0 ; i < arr.length - 1 ; i++){
+        		for(let j = i + 1 ; j < arr.length; j++){
+        			if(arr[i] === arr[j]){
+        				arr.splice(i , 1);
+        				// 删除后下表移动到原位置
+        				j--;
+        			}
+        		}
+        	}
+        	return arr;
+        }
+        
+        ```
+
+- 排序后 相邻位置进行比较
+
+    - ```
+        // 排序进行后进行相邻比较
+        function sortQ(arr){
+        	// 排序后
+        	// 没参数 如果没有指明 compareFunction ，那么元素会按照转换为的字符串的诸个字符的Unicode位点进行排序。
+        	arr.sort();
+        	for(let i = 0 ; i < arr.length - 1 ; i++){
+        		if(arr[i] === arr[i + 1]){
+        			arr.splice(i , 1);
+        			i--;
+        		}
+        	}
+        
+        }
+        ```
+
+##### 2.查找元素位置型
+
+- `indexOf` 查找元素并返回其第一个索引值
+
+    - ```
+        function uniq(arr){
+        	const res = [];
+        	for(let i = 0 ; i < arr.length ; i++){
+        		if(arr.indexOf(arr[i]) === i){
+        			res.push(arr[i])
+        		}
+        	}
+        	return res;
+        }
+        ```
+
+- `findIndex `  返回数组中第一个满足测试函数的元素的索引
+
+    - ```
+        function uniq(arr){
+        	const res = [];
+        	for(let i = 0 ; i < arr.length ; i++){
+        		if(arr.findIndex(item => item === arr[i]) === i ){
+        			res.push(arr[i]);
+        		}
+        	}
+        	return res;
+        }
+        ```
+
+##### 3. 查找元素存在型
+
+- `includes` 
+
+    - ```
+        // 查找元素存在型
+        function uniq(arr){
+        	const res = [];
+        	for(let i = 0 ; i < arr.length ; i++){
+        		if(!res.includes(arr[i])){
+        			res.push(arr[i])
+        		}
+        	}
+        	return res;
+        }
+        ```
+
+##### 4. 利用数据结构类型
+
+- set
+
+    - ```
+        // set
+        function uniq(arr){
+        	return [...new Set(arr)]
+        }
+        ```
+
+- map
+
+    - ```
+        function uniq(arr){
+        	const map = new Map();
+        	arr.forEach(item =>{
+        		map.set(item , true)
+        	})
+        	// 返回键值 Object.keys（key）
+        	return[...map.keys()]
+        }
+        ```
+
+##### 5. 总结
+
+在简单的测试用例大概 2000 万条数据下，`indexOf` 的方案速度相对最快
+
+![img](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/12/26/16f423b56fc0c430~tplv-t2oaga2asx-watermark.awebp)
+
+## 3. vue双向绑定的原理
+
+- Mvc 模式  到  mvvm模式 的转变 
+
+![img](https://wfx7jb3ja4.feishu.cn/space/api/box/stream/download/asynccode/?code=NWVkNGQyYzg4MzMyMjcxZDViZmY1OGEyN2NhZTY4OTlfZWdGbzdlY1NsVEFDYTNCQW1sWTl3eU8xWHJXS092VlJfVG9rZW46Ym94Y253MG5TenpERXBPNTlXNHlqVzVocXBoXzE2NDI5NDcyMTI6MTY0Mjk1MDgxMl9WNA)
+
+
+
+- Mvc 模式 controler 层要大量的控制dom
+- Mvvm 模式 是真正做到了数据与视图的分离，  view 和 model 改变时 ， vm层自动进行数据和视图的同步
+
+- vue.js 采用数据劫持结合发布者-订阅者模式的方式 ， 通过Object.defineProperty()来劫持各个属性的setter、getter，在数据监听时发布消息给订阅者 ， 触发响应的监听回调
+- 发布 订阅者模式让双向绑定更有效率（一对多）
+- 实现一个数据监听器 Observer 
+    - 核心是 Object.defineProperty() ， 将Observe的数据对象进行递归遍历 ， 包括子属性的对象加上setter getter方法 ， 赋值时就会调用setter方法，就监听到了数据变化
+    - 通知订阅者
+- 实现Compile 
+    - 解析模板的指令 ， 将模板中的变量替换成数据 ，
+    - 初始化页面渲染 ， 
+    - 并绑定更新函数 ， 添加监听数据的订阅者 ， 一但数据有变化 ， 更新视图 --绑定更新函数
+- 实现watcher （解析 compile 和 observe 的桥梁）
+    - 实例化在订阅者添加自己
+    - 自己有一个update()方法  --添加订阅者
+    - 待属性变动 ， 接受通知，调用自身的update() , 并触发compile中的回调 --》更新视图
+- 整合形成一个mvvm
+
+![img](https://wfx7jb3ja4.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWEyMjFkYTYxNTc1MWFjNmE5OWU5ZmI0YjA0ZmUyZDhfa3k5Tzdud1p0ZzQ0cURsZHk1dUo5VVRudXFDd2dRb3hfVG9rZW46Ym94Y240cmRGa1kwYnloNDlWTnA4YzR1dVhmXzE2NDI5NDcyMTI6MTY0Mjk1MDgxMl9WNA)
+
+## 4.[70. 爬楼梯 - 力扣（LeetCode） (leetcode-cn.com)](https://leetcode-cn.com/problems/climbing-stairs/)
+
+- 经典dp
+
+```
+var climbStairs = function(n) {
+    const dp = [];
+    dp[0] = 1;
+    dp[1] = 1
+    for(let i = 2 ; i <= n ; i++){
+        dp[i] = dp[i - 1] + dp[i - 2];
+    } 
+    return dp[n]
+
+};
+```
+
+
+
