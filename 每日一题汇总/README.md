@@ -1658,3 +1658,27 @@ var climbStairs = function(n) {
 };
 ```
 
+
+
+- 记忆化递归
+  由于递归太耗时，可以用记忆化递归避免重复的计算。
+  **解题过程：**
+  1.先对n为0这种特殊情况进行处理，然后n为1和2时直接return即可
+  2.memo数组：存储中间结果，避免重复计算
+  3.接下来就是判断memo[n]是否存在，如果计算过即存在，直接返回，无需重复计算；若不存在，则进行递归计算，为前两个之和。
+  **代码**
+
+```js
+const memo = []
+var climbStairs = function(n) {
+    if(n === 0) return 1
+    if(n <= 3) return n
+    if(memo[n]) {
+        return memo[n]// 记忆化递归 避免重复计算
+    } else {
+        memo[n] = climbStairs(n-1) + climbStairs(n-2)
+    }
+    return memo[n]
+}
+```
+
