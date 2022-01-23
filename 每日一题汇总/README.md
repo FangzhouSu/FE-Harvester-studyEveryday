@@ -1432,6 +1432,8 @@ var isValid = function(s) {
 
 ## 1. let、const、var区别
 
+> 能用const的情况尽量使用const，其他情况下大多数使用let，避免使用var
+
 - 作用域
     - let 、 const 为块级作用域 
     - var为函数作用域
@@ -1460,13 +1462,13 @@ var isValid = function(s) {
 | 是否必须设置初始值 | ×       | ×       | ✔️         |
 | 能否改变指针指向   | ✔️       | ✔️       | ×         |
 
-## 2. 数组去重的方法有哪些？
+## 2. ==数组去重==的方法有哪些？
 
 ##### 1. 数组元素比较型
 
 - 双层`for`循环
 
-    - ```
+    - ```js
         // 双层for循环
         // 前一个跟之后所有进行比较 ， 重复了删除掉
         function uniq(arr){
@@ -1486,7 +1488,7 @@ var isValid = function(s) {
 
 - 排序后 相邻位置进行比较
 
-    - ```
+    - ```js
         // 排序进行后进行相邻比较
         function sortQ(arr){
         	// 排序后
@@ -1506,7 +1508,9 @@ var isValid = function(s) {
 
 - `indexOf` 查找元素并返回其第一个索引值
 
-    - ```
+    > 这个方法有点秀哦！利用`indexOf` API的特性，且效率也是最佳！
+
+    - ```js
         function uniq(arr){
         	const res = [];
         	for(let i = 0 ; i < arr.length ; i++){
@@ -1520,11 +1524,11 @@ var isValid = function(s) {
 
 - `findIndex `  返回数组中第一个满足测试函数的元素的索引
 
-    - ```
+    - ```js
         function uniq(arr){
         	const res = [];
         	for(let i = 0 ; i < arr.length ; i++){
-        		if(arr.findIndex(item => item === arr[i]) === i ){
+        		if(arr.findIndex((item) => item === arr[i]) === i ){
         			res.push(arr[i]);
         		}
         	}
@@ -1536,7 +1540,7 @@ var isValid = function(s) {
 
 - `includes` 
 
-    - ```
+    - ```js
         // 查找元素存在型
         function uniq(arr){
         	const res = [];
@@ -1553,7 +1557,7 @@ var isValid = function(s) {
 
 - set
 
-    - ```
+    - ```js
         // set
         function uniq(arr){
         	return [...new Set(arr)]
@@ -1562,11 +1566,11 @@ var isValid = function(s) {
 
 - map
 
-    - ```
+    - ```js
         function uniq(arr){
         	const map = new Map();
         	arr.forEach(item =>{
-        		map.set(item , true)
+        		map.set(item, true)
         	})
         	// 返回键值 Object.keys（key）
         	return[...map.keys()]
@@ -1609,20 +1613,48 @@ var isValid = function(s) {
 
 ## 4.[70. 爬楼梯 - 力扣（LeetCode） (leetcode-cn.com)](https://leetcode-cn.com/problems/climbing-stairs/)
 
-- 经典dp
+- 经典dp 
 
-```
+  分成多个子问题，爬第n阶楼梯的方法数量，等于 2 部分之和
+
+  ​	**爬上 n-1 阶楼梯的方法数量**。因为再爬1阶就能到第n阶
+	
+	​	**爬上 n-2 阶楼梯的方法数量**，因为再爬2阶就能到第n阶
+	
+	```
+	动态规划的转移方程为：dp[i] = dp[i - 1] + dp[i - 2];
+	```
+	
+	递归地解决问题——
+
+```js
 var climbStairs = function(n) {
     const dp = [];
     dp[0] = 1;
-    dp[1] = 1
+    dp[1] = 1;
     for(let i = 2 ; i <= n ; i++){
         dp[i] = dp[i - 1] + dp[i - 2];
     } 
     return dp[n]
-
 };
 ```
 
+时间复杂度与空间复杂度都为O(N)
 
+- 使用滚动数组实现动态规划（而不是使用空间复杂度为N的递归）
+  - 这也是官方题解的第一种方法（其他数学方法我退缩了XD）
+    - ![fig1](https://assets.leetcode-cn.com/solution-static/70/70_fig1.gif)
+
+```js
+var climbStairs = function(n) {
+  let p = 0, q = 1, r = 1;// 初始化dp[0] dp[1] dp[2]
+  for (let i = 2; i <= n; i++) {
+    // 利用滚动数组达到O(1)空间复杂度的动归
+    p = q;
+    q = r;
+    r = p + q;
+  }
+  return r;
+};
+```
 
