@@ -781,18 +781,10 @@ var largestNumber = function(nums) {
 
 ## 4.手写斐波那契数列
 
-- `简单的动归解法`
-
-```js
-let fib = function(n) {
-    let dp = [0, 1]
-    for(let i = 2; i <= n; i++) {
-        dp[i] = dp[i - 1] + dp[i - 2]
-    }
-    console.log(dp)
-    return dp[n]
-};
-```
+> [递归，记忆化搜索与动态规划_Keep Learning-CSDN博客](https://blog.csdn.net/zjxxyz123/article/details/80147546)——感谢这篇很简单易懂的文章，帮我理解了`记忆化搜索+递归=(约等于)动态规划`
+>
+> - **记忆化搜索和递归**大致思路一样，是一种**自顶向下**的思路
+> - **动态规划**则是一种**自底向上**的思路
 
 - `超简单的递归`
 
@@ -808,9 +800,46 @@ let fb = function(n) {
 };
 ```
 
-- 记忆化搜索提升效率
+递归树如下，可以看到存在大量重复计算
+![这里写图片描述](https://img-blog.csdn.net/2018043009544876?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3pqeHh5ejEyMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 
-[斐波那契数列 - cj-ervin的个人空间 - OSCHINA - 中文开源技术交流社区](https://my.oschina.net/u/4074923/blog/4274493)
+- `记忆化搜索`提升效率
+
+```js
+const memo = []
+let fb = function(n) {
+    if (n === 0) {
+        return 0
+    }
+    if (n === 1) {
+        return 1
+    }
+    
+    // 这一步就是记忆化搜素新添的内容，使用一个数组来保存子问题的答案——这也正是动态规划的思想
+    if (memo[n]) {
+        return memo[n]
+    } else {
+        memo[n] = fb(n - 1) + fb(n - 2)
+    }
+    return memo[n]
+};
+```
+
+- `简单的动归解法`
+  - 将原问题拆解成若干个子问题，同时**保存子问题的答案**——使得每个子问题只求解一次，最终获得原问题的答案~
+
+```js
+let fib = function(n) {
+    let dp = [0, 1]
+    for(let i = 2; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2]
+    }
+    console.log(dp)
+    return dp[n]
+};
+```
+
+
 
 # 22/1/19每日一题
 
@@ -1613,17 +1642,55 @@ var isValid = function(s) {
 
 ## 4.[70. 爬楼梯 - 力扣（LeetCode） (leetcode-cn.com)](https://leetcode-cn.com/problems/climbing-stairs/)
 
-- 经典dp 
+> 和斐波那契数列问题异曲同工~
+>
+> 很easy！
 
-  分成多个子问题，爬第n阶楼梯的方法数量，等于 2 部分之和
+- **记忆化递归**
 
-  ​	**爬上 n-1 阶楼梯的方法数量**。因为再爬1阶就能到第n阶
-	
-	​	**爬上 n-2 阶楼梯的方法数量**，因为再爬2阶就能到第n阶
-	
-	```
-	动态规划的转移方程为：dp[i] = dp[i - 1] + dp[i - 2];
-	```
+  > 理解记忆化递归 为自己的面试加分！
+  >
+  > - 使用数组存储中间结果；
+  > - 中间结果如果存在，则不要重复使用递归式进行计算！
+
+  由于递归太耗时，可以用记忆化递归避免重复的计算。
+  **解题过程：**
+  1.先对n为0这种特殊情况进行处理，然后n为1和2时直接return即可
+  2.memo数组：存储中间结果，避免重复计算
+  3.接下来就是判断memo[n]是否存在，如果计算过即存在，直接返回，无需重复计算；若不存在，则进行递归计算，为前两个之和。
+  **代码**
+
+```js
+const memo = []
+var climbStairs = function(n) {
+    if(n === 0) return 1
+    if(n <= 3) return n
+    
+    // 记忆化递归 避免重复计算
+    if(memo[n]) {
+        return memo[n]
+    } else {
+        memo[n] = climbStairs(n-1) + climbStairs(n-2)
+    }
+    return memo[n]
+}
+```
+
+
+
+- 经典动归问题
+
+  分成多个子问题，爬第n阶楼梯的**方法**数量，等于 2 部分之和
+
+  ​	**爬上 n-1 阶楼梯的方法数量**
+
+  ​	**爬上 n-2 阶楼梯的方法数量**
+
+  ```
+  动态规划的转移方程为：dp[i] = dp[i - 1] + dp[i - 2];
+  ```
+
+  简单地使用动归求解（这里没必要使用递归这种时间复杂度较高的方法，除非用了记忆化递归~）
 
 ```js
 var climbStairs = function(n) {
@@ -1639,7 +1706,7 @@ var climbStairs = function(n) {
 
 时间复杂度与空间复杂度都为O(N)
 
-- 使用滚动数组实现动态规划（而不是使用空间复杂度为N的递归）
+- 使用滚动数组（**空间复杂度为1**）实现动态规划（而不是使用**空间复杂度为N**的递归）
   - 这也是官方题解的第一种方法（其他数学方法我退缩了XD）
     - ![fig1](https://assets.leetcode-cn.com/solution-static/70/70_fig1.gif)
 
@@ -1656,27 +1723,4 @@ var climbStairs = function(n) {
 };
 ```
 
-
-
-- 记忆化递归
-  由于递归太耗时，可以用记忆化递归避免重复的计算。
-  **解题过程：**
-  1.先对n为0这种特殊情况进行处理，然后n为1和2时直接return即可
-  2.memo数组：存储中间结果，避免重复计算
-  3.接下来就是判断memo[n]是否存在，如果计算过即存在，直接返回，无需重复计算；若不存在，则进行递归计算，为前两个之和。
-  **代码**
-
-```js
-const memo = []
-var climbStairs = function(n) {
-    if(n === 0) return 1
-    if(n <= 3) return n
-    if(memo[n]) {
-        return memo[n]// 记忆化递归 避免重复计算
-    } else {
-        memo[n] = climbStairs(n-1) + climbStairs(n-2)
-    }
-    return memo[n]
-}
-```
-
+## 
