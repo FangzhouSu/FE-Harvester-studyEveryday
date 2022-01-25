@@ -1723,7 +1723,7 @@ var climbStairs = function(n) {
 };
 ```
 
-## 1/24 每日一题
+# 1/24 每日一题
 
 > 1.字面量创建对象和 new 创建对象有什么区别，new 内部都实现了什么， 手写一个 new 
 > 2.`==`和`===`有什么区别 
@@ -1859,3 +1859,258 @@ function myNew(fn, ...args) {
 - 再将十进制转为字符串的形式
 
 在转 换的过程中发生了取近似值，所以打印出来的是一个近似值的**字符串**
+
+
+
+# 1.25每日一题
+
+> 1、三栏布局，有多少种？思路和代码
+> 2、给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
+>
+> 最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+> 输入：digits = [1,2,3]
+> 输出：[1,2,4]
+> 3、css中定位有多少个值，每个值有什么特点
+> 4、对BFC的理解，如何创建BFC
+
+## 1、==三栏布局==，有多少种？思路和代码
+
+> 重点是 圣杯布局 两翼布局
+
+三栏布局一般指的是页面中一共有三栏，**左右两栏宽度固定，中间自适应的布局**，三栏布局的具体实现：
+
+- 利用**绝对定位**，左右两栏设置为绝对定位，中间设置对应方向大小的 margin 的值。
+
+```css
+.outer {
+  position: relative;
+  height: 100px;
+}
+
+.left {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: tomato;
+}
+
+.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100px;
+  background: gold;
+}
+
+.center {
+  margin-left: 100px;
+  margin-right: 200px;
+  height: 100px;
+  background: lightgreen;
+}
+```
+
+- 利用 flex 布局，左右两栏设置固定大小，中间一栏设置为 flex:1。
+
+```css
+.outer {
+  display: flex;
+  height: 100px;
+}
+
+.left {
+  width: 100px;
+  background: tomato;
+}
+
+.right {
+  width: 100px;
+  background: gold;
+}
+
+.center {
+  flex: 1;
+  background: lightgreen;
+}
+```
+
+- 利用浮动，左右两栏设置固定大小，并设置对应方向的浮动。中间一栏设置左右两个方向的 margin 值，注意这种方式**，中间一栏必须放到最后：**
+
+```css
+.outer {
+  height: 100px;
+}
+
+.left {
+  float: left;
+  width: 100px;
+  height: 100px;
+  background: tomato;
+}
+
+.right {
+  float: right;
+  width: 200px;
+  height: 100px;
+  background: gold;
+}
+
+.center {
+  height: 100px;
+  margin-left: 100px;
+  margin-right: 200px;
+  background: lightgreen;
+}
+```
+
+- ==圣杯布局==，利用**浮动和负边距**来实现。父级元素设置左右的 padding，三列均设置向左浮动，中间一列放在最前面，宽度设置为父级元素的宽度，因此后面两列都被挤到了下一行，通过设置 margin 负值将其移动到上一行，再利用相对定位，定位到两边。
+
+```css
+.outer {
+  height: 100px;
+  padding-left: 100px;
+  padding-right: 200px;
+}
+
+.left {
+  position: relative;
+  left: -100px;
+
+  float: left;
+  margin-left: -100%;
+
+  width: 100px;
+  height: 100px;
+  background: tomato;
+}
+
+.right {
+  position: relative;
+  left: 200px;
+
+  float: right;
+  margin-left: -200px;
+
+  width: 200px;
+  height: 100px;
+  background: gold;
+}
+
+.center {
+  float: left;
+
+  width: 100%;
+  height: 100px;
+  background: lightgreen;
+}
+```
+
+- ==双飞翼布局==，双飞翼布局相对于圣杯布局来说，左右位置的保留是通过中间列的 **margin** 值来实现的，而不是通过父元素的 padding 来实现的。本质上来说，也是通过**浮动和外边距负值**来实现的。
+
+```css
+.outer {
+  height: 100px;
+}
+
+.left {
+  float: left;
+  margin-left: -100%;
+
+  width: 100px;
+  height: 100px;
+  background: tomato;
+}
+
+.right {
+  float: left;
+  margin-left: -200px;
+
+  width: 200px;
+  height: 100px;
+  background: gold;
+}
+
+.wrapper {
+  float: left;
+
+  width: 100%;
+  height: 100px;
+  background: lightgreen;
+}
+
+.center {
+  margin-left: 100px;
+  margin-right: 200px;
+  height: 100px;
+}
+```
+
+## 2、css中定位有多少个值，每个值有什么特点
+
+position 有以下属性值：
+
+| 属性值   | 概述                                                         |
+| -------- | ------------------------------------------------------------ |
+| absolute | 生成绝对定位的元素，相对于 static 定位以外的一个父元素进行定位。元素的位置通过 left、top、right、bottom 属性进行规定。**元素会被移除文档流** |
+| relative | 生成相对定位的元素，相对于其原来的位置进行定位。元素的位置通过 left、top、right、bottom 属性进行规定。**元素会被移除文档流** |
+| fixed    | 生成绝对定位的元素，指定元素相对于屏幕视⼝（viewport）的位置来指定元素位置。元素的位置在屏幕滚动时不会改变，⽐如回到顶部的按钮⼀般都是⽤此定位⽅式。 |
+| static   | 默认值，没有定位，元素出现在正常的文档流中，会忽略 top, bottom, left, right 或者 z-index 声明，块级元素从上往下纵向排布，⾏级元素从左向右排列。 |
+| inherit  | 规定从父元素继承 position 属性的值                           |
+
+前面三者的定位方式如下：
+
+- **relative：**元素的定位永远是**相对于元素自身**位置的，和其他元素没关系，也不会影响其他元素。
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1500604/1603554694939-58dfe7f7-2fc9-45e5-9961-a953f95496a7.png#align=left&display=inline&height=105&margin=%5Bobject%20Object%5D&originHeight=105&originWidth=448&size=0&status=done&style=stroke&width=447)
+
+**fixed：**元素的定位是相对于 window （或者 iframe）边界的，和其他元素没有关系。但是它**具有破坏性，会导致其他元素位置的变化**(没脱离文档流还随心随遇地放置在某个位置！)。
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1500604/1603554694841-89472ba9-b236-4098-802f-c3c26ff49466.png#align=left&display=inline&height=117&margin=%5Bobject%20Object%5D&originHeight=135&originWidth=516&size=0&status=done&style=stroke&width=446)
+
+**absolute：**元素的定位相对于前两者要复杂许多。如果为 absolute 设置了 top、left，浏览器会根据什么去确定它的纵向和横向的偏移量呢？答案是**浏览器会递归查找该元素的所有父元素，如果找到一个设置了`position:relative/absolute/fixed`的元素，就以该元素为基准定位，如果没找到，就以浏览器边界定位**。如下两个图所示：
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1500604/1603554694882-589670e0-cd52-41d4-a3ed-4ebbdfc88f32.png#align=left&display=inline&height=142&margin=%5Bobject%20Object%5D&originHeight=183&originWidth=576&size=0&status=done&style=stroke&width=446)
+
+> 这里真是学习到了啊！
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1500604/1603554694842-2764d9ed-d5fe-45f4-8ede-34a73d237f94.png#align=left&display=inline&height=118&margin=%5Bobject%20Object%5D&originHeight=137&originWidth=516&size=0&status=done&style=stroke&width=446)
+
+
+
+## 3、对BFC的理解，如何创建BFC
+
+- Block formatting contexts（块级格式化上下文）：首先 BFC 是一个**独立的布局环境**，BFC 中**元素的布局**是**不受外界影响**的。
+  - 本质上是指 **盒子内部的元素不会影响外部元素**的一个布局
+- 如何创建一个 BFC
+  - **float** 的值不为 none
+  - **position** 的值不为 static 或者 relative
+  - **display** 的值为 table-cell、table-caption、inline-block、flex、inline-flex 中的一个
+  - **overflow** 的值不为 visible
+- BFC 的使用场景
+  - 使用 BFC 来**防止外边距折叠**
+  - 使用 BFC 来包含浮动，**解决容器高度塌陷**的问题
+  - 使用 BFC 来**防止文字环绕**
+  - 在多列布局中使用 BFC，解决最后一列被挤到下一行的问题
+
+## 4、给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
+
+> 最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+> 输入：digits = [1,2,3]
+> 输出：[1,2,4]
+
+```js
+var plusOne = function(digits) {
+  const n = digits.length;
+  for (let i = n - 1; i >= 0; i--) {
+    digits[i]++;
+    digits[i] = digits[i] % 10;
+    if (digits[i] !== 0) {
+      return digits;// 这一位没有进位就可以直接返回结果了~
+    }
+  }
+  digits.unshift(1);// 在最高位前面还要再进一位~
+  return digits;
+};
+```
+
