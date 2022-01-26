@@ -1,3 +1,9 @@
+> 本仓库的线上预览部分放到了这里——
+>
+> [每日一题 | 前端知识库@敲代码的小提琴手 (fangzhousu.github.io)](https://fangzhousu.github.io/frontend-knowledge-base/study-everyday/22-1-study.html)
+>
+> 尽量保证每日更新~
+
 # FE-harvester-studyEveryday
 
 大家来积极地讨论每日一题鸭~争取每日都能有收获！
