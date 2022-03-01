@@ -1,8 +1,8 @@
 > 本仓库的线上预览部分放到了这里——
 >
 > [每日一题 | 前端知识库@敲代码的小提琴手 (fangzhousu.github.io)](https://fangzhousu.github.io/frontend-knowledge-base/study-everyday/22-1-study.html)
->
-> 尽量保证每日更新~
+
+> 由于懒惰的仓库主人拿了阿里的春招offer 所以不想更新了😢 之后的方向...努力构建自己的知识体系（在线链接就是上方那个前端知识库）&增强工程能力吧，背面试题啥的 怪枯燥的🐧
 
 # FE-harvester-studyEveryday
 
